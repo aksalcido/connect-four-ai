@@ -19,6 +19,21 @@ class Board:
         row = self.column_available(player_move)
         self.board[row][player_move - 1] = player_color
 
+    def all_moves(self) -> list:
+        '''
+        Gets all of the moves that are possible on the current board. Meaning an index of each column that is not
+        full and can receieve a piece.
+        
+        Returns a list of these indexes starting at 0
+        '''
+        moves = []
+
+        for i in range(settings.COLS):
+            if self.board[0][i] == settings.EMPTY:
+                moves.append(i)
+
+        return moves
+
     # ===== Move Validation Checking ===== #
     def valid_move(self, player_move) -> bool:
         '''
@@ -30,7 +45,7 @@ class Board:
         return player_move and player_move.isnumeric() and \
             self.in_bounds(int(player_move)) and self.column_available(int(player_move)) != settings.INVALID_COLUMN
 
-    def in_bounds(self, player_move):
+    def in_bounds(self, player_move) -> bool:
         '''
         Returns a bool:
             True if the player_move integer is within the range of [1-7], meaning it is a valid
@@ -57,7 +72,7 @@ class Board:
         '''
         return self.check_vertical() or self.check_horizontal() or self.check_diagonal_left() or self.check_diagonal_right()
 
-    def tie(self):
+    def tie(self) -> bool:
         '''
         Returns a bool:
             True if there is a tie on the board, meaning there is no winner which is checked by self.winner() before this function
@@ -126,13 +141,13 @@ class Board:
         return False
 
     # ===== Display Methods ===== #
-    def display(self):
+    def display(self) -> None:
         '''
         Prints the current board and displays to the user.
         '''
         print(self)
     
-    def __repr__(self):
+    def __repr__(self) -> str:
         '''
         Override the __repr__ method so that we are able to print a displayable board
         for the user.
