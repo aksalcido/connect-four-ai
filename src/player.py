@@ -2,13 +2,14 @@ from python_settings import settings
 
 class Player:
     
-    def __init__(self, color):
+    def __init__(self, color, player_str="HUMAN"):
         '''
         Initializes a Player object that possesses their piece color and total win count.
         The player takes input from their respective user and returns the move to get
         validated.
         '''
         self.color = color
+        self.player_str = player_str
         self.wins = 0
 
     def get_move(self, **kwargs) -> str:
@@ -25,6 +26,9 @@ class Player:
         Return the piece color that the player object has ownership of.
         '''
         return self.color
+
+    def get_player_str(self) -> str:
+        return self.player_str
 
     def get_wins(self) -> int:
         '''

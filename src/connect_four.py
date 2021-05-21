@@ -79,9 +79,9 @@ class ConnectFour:
         if self.board.winner():
             self.gameover = True
         else:
-            self.check_for_tie()
+            self._check_for_tie()
     
-    def check_for_tie(self) -> None:
+    def _check_for_tie(self) -> None:
         '''
         Checks if there is a tie on the board. If there is, sets the attribute
         gameover to True. The game will proceed to end with no winners.
@@ -101,15 +101,22 @@ class ConnectFour:
         else:
             print("Player2 (YELLOW)'s Turn to Move")
 
-    def display_winner(self) -> None:
+    def display_game_results(self) -> None:
         '''
-        Display the winner and assign the last_winner to the player that made the last move.
+        Handles and displays the game results. Game can end in Win or Tie, so both cases
+        are handled depending on if a tie was found or not.
         '''
         if self.tie:
-            self.last_winner = None
-            print("Tie!")
-            return
-        
+            self._handle_and_display_tie()
+        else:
+            self._handle_and_display_winner()
+
+    def _handle_and_display_winner(self) -> None:
+        '''
+        If winner, last_winner is assigned to the player that made the last move since
+        a winning game state was verified after their last move. Their win count
+        is then incremented and the player that won is announced.
+        '''
         self.last_winner = self.current_turn_player
         self.current_turn_player.add_win()
 
@@ -117,6 +124,14 @@ class ConnectFour:
             print("Player1 (RED) Wins!")
         else:
             print("Player2 (YELLOW) Wins!")
+
+    def _handle_and_display_tie(self) -> None:
+        '''
+        last_winner is assigned to None since neither players ended with a win. It is then
+        announced that the game ended in a Tie.
+        '''
+        self.last_winner = None
+        print("Tie!")
 
     def display_overall_results(self) -> None:
         ''' 
@@ -127,15 +142,10 @@ class ConnectFour:
         print("Current Wins: ")
         player1_ai = ""
         player2_ai = ""
-        print(f"Player1{self._display_ai(self.player1)}: {self.player1.get_wins()} --- Player2{self._display_ai(self.player2)}: {self.player2.get_wins()}")
+        print(f"Player1 ({self.player1.get_player_str()}): {self.player1.get_wins()} --- Player2 ({self.player2.get_player_str()}): {self.player2.get_wins()}")
         print('-' * 30)
 
-    def _display_ai(self, player) -> str:
-        if type(player) == PlayerAI:
-            return " (AI)"
-        else:
-            return ""
-    
+
     # ===== Initialization Methods ===== #
     def create_player(self, player, piece_color) -> Player or PlayerAI:
         '''
