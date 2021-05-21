@@ -1,11 +1,9 @@
 import unittest
 import os
 from python_settings import settings
-from src import Board
+from board import Board
 
 os.environ["SETTINGS_MODULE"] = 'settings' 
-
-# https://stackoverflow.com/questions/61151/where-do-the-python-unit-tests-go#:~:text=For%20a%20file%20module.py,level%20as%20the%20code%20directory).
 
 class TestBoard(unittest.TestCase):
     '''
