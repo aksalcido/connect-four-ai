@@ -1,6 +1,6 @@
 from python_settings import settings
-from player import Player
 from random import randint
+from player import Player
 
 # Initialize settings.py as environment variable
 import os
