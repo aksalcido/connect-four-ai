@@ -1,0 +1,14 @@
+# settings.py
+EMPTY = 0
+RED = 1
+YELLOW = 2
+ROWS = 6
+COLS = 7
+INVALID_COLUMN = -1
+
+HUMAN_PLAYER = 1
+AI_PLAYER = 2
+
+EASY = 1
+MEDIUM = 2
+HARD = 3
