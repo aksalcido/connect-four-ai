@@ -2,7 +2,7 @@ from python_settings import settings
 
 class Player:
     
-    def __init__(self, color, player_str="HUMAN"):
+    def __init__(self, color, player_str = "HUMAN"):
         '''
         Initializes a Player object that possesses their piece color and total win count.
         The player takes input from their respective user and returns the move to get
@@ -28,6 +28,10 @@ class Player:
         return self.color
 
     def get_player_str(self) -> str:
+        '''
+        Returns a player string representation of the Player. For human players,
+        HUMAN_STR is returned. For the child class PlayerAI, AI_STR is returned.
+        '''
         return self.player_str
 
     def get_wins(self) -> int:
