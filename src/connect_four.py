@@ -54,7 +54,7 @@ class ConnectFour:
         validated, the move is made on the board to reflect the move changes.
         '''
         player_move = None
-        
+
         while not self.board.valid_move(player_move):
             player_move = self.current_turn_player.get_move(board=self.board)
         
@@ -183,7 +183,7 @@ class ConnectFour:
         self.tie = False
     
     # ===== Get Methods ===== #
-    def get_winner(self) -> None or Player or PlayerAI:
+    def get_last_winner(self) -> None or Player or PlayerAI:
         '''
         Returns the last_winner:
             None if no last_winner occured or a player object.

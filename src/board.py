@@ -9,6 +9,7 @@ class Board:
         (e.g: players, current_turn, etc).
         '''
         self.board = self.initialize_new_board()
+        self.winning_color = None
 
     def move(self, player_move: int, player_color: int):
         '''
@@ -30,7 +31,7 @@ class Board:
 
         for i in range(settings.COLS):
             if self.board[0][i] == settings.EMPTY:
-                moves.append(i)
+                moves.append(i + 1)
 
         return moves
 
@@ -87,6 +88,24 @@ class Board:
 
         return True
 
+    def gameover(self) -> bool:
+        '''
+        Returns a bool:
+            True if there is a winner or tie on the board.
+            False otherwise.
+
+        This function is utility to check various board states for the AI to base its next move off of. A board resulting in gameover
+        can net the biggest gain/loss depending on who wins/loses.
+        '''
+        return self.winner() or self.tie()
+
+    def get_winner(self) -> int:
+        '''
+        Returns the winning color of the board or None. Used to check if winner is found when looking for
+        best move for AI.
+        '''
+        return self.winning_color
+
     # ===== Four in a Row Checks ===== #
     def check_vertical(self) -> bool:
         '''
@@ -97,6 +116,7 @@ class Board:
         for i in range(settings.ROWS - 3):
             for j in range(settings.COLS):
                 if self.board[i][j] != settings.EMPTY and self.board[i][j] == self.board[i + 1][j] == self.board[i + 2][j] == self.board[i + 3][j]:
+                    self.winning_color = self.board[i][j]
                     return True
 
         return False
@@ -110,6 +130,7 @@ class Board:
         for i in range(settings.ROWS):
             for j in range(settings.COLS - 3):
                 if self.board[i][j] != settings.EMPTY and self.board[i][j] == self.board[i][j + 1] == self.board[i][j + 2] == self.board[i][j + 3]:
+                    self.winning_color = self.board[i][j]
                     return True
         
         return False
@@ -123,6 +144,7 @@ class Board:
         for i in range(settings.ROWS - 3):
             for j in range(settings.COLS - 3):
                 if self.board[i][j] != settings.EMPTY and self.board[i][j] == self.board[i + 1][j + 1] == self.board[i + 2][j + 2] == self.board[i + 3][j + 3]:
+                    self.winning_color = self.board[i][j]
                     return True
 
         return False
@@ -136,6 +158,7 @@ class Board:
         for i in range(3, settings.ROWS):
             for j in range(settings.COLS - 3):
                 if self.board[i][j] != settings.EMPTY and self.board[i][j] == self.board[i - 1][j + 1] == self.board[i - 2][j + 2] == self.board[i - 3][j + 3]:
+                    self.winning_color = self.board[i][j]
                     return True
         
         return False
@@ -146,7 +169,37 @@ class Board:
         Prints the current board and displays to the user.
         '''
         print(self)
-    
+
+    # Initialization Method #
+    def initialize_new_board(self) -> list:
+        '''
+        Initializes a new board and assigns to self.board. This function is called at initialization
+        and when the player wishes to play again.
+        '''
+        new_board = []
+
+        for i in range(settings.ROWS):
+            new_row = []
+
+            for j in range(settings.COLS):
+                new_row.append(settings.EMPTY)
+
+            new_board.append(new_row)
+        
+        self.board = new_board
+        self.winning_color = None
+
+        return self.board
+
+    # ===== Override Methods ===== #
+    def __getitem__(self, coords: tuple) -> int:
+        '''
+        Overrides the __getitem__ method so that we do not have to access the self.board attribute
+        from outside of this class. Instead we can directly index this board object with coords (tuple).
+        '''
+        x, y = coords
+        return self.board[x][y]
+
     def __repr__(self) -> str:
         '''
         Override the __repr__ method so that we are able to print a displayable board
@@ -172,23 +225,3 @@ class Board:
         board_str += '---------------'
 
         return board_str
-
-    # Initialization Method #
-    def initialize_new_board(self) -> list:
-        '''
-        Initializes a new board and assigns to self.board. This function is called at initialization
-        and when the player wishes to play again.
-        '''
-        new_board = []
-
-        for i in range(settings.ROWS):
-            new_row = []
-
-            for j in range(settings.COLS):
-                new_row.append(settings.EMPTY)
-
-            new_board.append(new_row)
-        
-        self.board = new_board
-
-        return self.board
